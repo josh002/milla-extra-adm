@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "milla-extra-adm",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
