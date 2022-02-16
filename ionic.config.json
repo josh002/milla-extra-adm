@@ -1,0 +1,7 @@
+{
+  "name": "milla-extra-adm",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
