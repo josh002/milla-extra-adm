@@ -1,6 +1,45 @@
-
-
 <ion-content>
-  <ion-title>cotizacion</ion-title>
-
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Nuevo Producto</ion-card-subtitle>
+      <ion-chip>
+        <ion-icon name="logo-usd"></ion-icon>
+        <ion-label>{{priceTotal/quantity | number: '0.2' }}</ion-label>
+      </ion-chip>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Nombre producto</ion-label>
+        <ion-input [(ngModel)]="nameProduct" type="text" inputmode="text"></ion-input>
+      </ion-item>
+      <div class="buttons-wrapper">
+        <ion-button (click)="addItemCot.present()" mode="ios" expand="full" expand="block" color="primary">Agregar
+          insumos</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
+
+<ion-modal mode="ios" #addItemCot>
+  <ng-template>
+    <ion-content>
+      <div class="list-items">
+        <h2>Lista de insumos</h2>
+        <ion-card mode="md" *ngFor="let item of list">
+          <ion-card-content>
+            <ion-item lines="none">
+              <ion-label>{{item.name}}</ion-label>
+              <ion-note slot="end" color="dark">$ {{item.priceUnit | number: '0.2'}}</ion-note>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+        <div class="buttons-wrapper">
+          <ion-button (click)="addItemCot.dismiss(); saveItems()" mode="ios" expand="full" expand="block"
+            color="primary">Guardar</ion-button>
+          <ion-button (click)="addItemCot.dismiss()" mode="ios" expand="full" expand="block" color="light">Cancelar
+          </ion-button>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
