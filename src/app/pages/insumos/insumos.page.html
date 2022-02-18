@@ -1,4 +1,56 @@
 <ion-content>
-  <ion-title>insumos</ion-title>
+  <div class="list-items">
+    <ion-card *ngFor="let item of list">
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-label>{{item.name}}</ion-label>
+          <ion-note slot="end" color="dark">$ {{item.priceUnit | number: '0.2'}}</ion-note>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
+  <ion-fab (click)="addItemModal.present()" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
+
+<ion-modal mode="ios" #addItemModal>
+  <ng-template>
+    <ion-content>
+      <div class="input-wrapper">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>Nuevo insumo</ion-card-subtitle>
+            <ion-chip>
+              <ion-icon name="logo-usd"></ion-icon>
+              <ion-label>{{priceTotal/quantity | number: '0.2' }}</ion-label>
+            </ion-chip>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              <ion-label position="floating">Insumo</ion-label>
+              <ion-input [(ngModel)]="name" type="text" inputmode="text"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Precio total</ion-label>
+              <ion-input [(ngModel)]="priceTotal" type="number" inputmode="numeric"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Cantidad</ion-label>
+              <ion-input [(ngModel)]="quantity" type="number" inputmode="numeric"></ion-input>
+            </ion-item>
+            <div class="buttons-wrapper">
+              <ion-button (click)="addItemModal.dismiss(); saveItem()" mode="ios" expand="full" expand="block"
+                color="primary">Guardar</ion-button>
+              <ion-button (click)="addItemModal.dismiss(); resetValues()" mode="ios" expand="full" expand="block"
+                color="light">Cancelar</ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
