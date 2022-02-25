@@ -34,4 +34,14 @@ export class InsumosPage implements OnInit {
   saveOnLocalStorage() {
     localStorage.setItem('insumos', JSON.stringify(this.list));
   }
+
+  deleteItem(insumo: Insumo) {
+    this.list = this.list.filter(item => {
+      if (item.name === insumo.name) {
+        return false;
+      }
+      return true;
+    });
+    this.saveOnLocalStorage();
+  }
 }

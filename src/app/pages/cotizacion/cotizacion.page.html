@@ -2,15 +2,18 @@
   <ion-card>
     <ion-card-header>
       <ion-card-subtitle>Nuevo Producto</ion-card-subtitle>
-      <ion-chip>
-        <ion-icon name="logo-usd"></ion-icon>
-        <ion-label>{{priceTotal/quantity | number: '0.2' }}</ion-label>
-      </ion-chip>
     </ion-card-header>
     <ion-card-content>
-      <ion-item>
-        <ion-label position="floating">Nombre producto</ion-label>
-        <ion-input [(ngModel)]="nameProduct" type="text" inputmode="text"></ion-input>
+      <ion-item lines="none" *ngFor="let item of listaProductos">
+        <ion-label>{{item.name}} x {{item.cantidadInsumos}}</ion-label>
+        <div class="precio" slot="end">$ {{item.precioInsumoTotal | number: '0.2'}}</div>
+        <ion-icon (click)="deleteItem(item)" slot="end" name="close-outline"></ion-icon>
+      </ion-item>
+      <ion-item class="total-item" lines="none" *ngIf="listaProductos.length > 0">
+        <ion-label><strong>Total</strong></ion-label>
+        <div class="precio" slot="end">$ {{totalProducto | number: '0.2'}}</div>
+        <ion-icon style="opacity: 0;" slot="end" name="close-outline"></ion-icon>
+
       </ion-item>
       <div class="buttons-wrapper">
         <ion-button (click)="addItemCot.present()" mode="ios" expand="full" expand="block" color="primary">Agregar
@@ -25,14 +28,21 @@
     <ion-content>
       <div class="list-items">
         <h2>Lista de insumos</h2>
-        <ion-card mode="md" *ngFor="let item of list">
-          <ion-card-content>
-            <ion-item lines="none">
-              <ion-label>{{item.name}}</ion-label>
+        <ion-accordion-group>
+          <ion-accordion mode="md" *ngFor="let item of list">
+            <ion-item lines="none" slot="header">
+              <ion-label>{{item.name}} <span *ngIf="item.cantidadInsumos > 0">x {{item.cantidadInsumos}}</span>
+              </ion-label>
               <ion-note slot="end" color="dark">$ {{item.priceUnit | number: '0.2'}}</ion-note>
             </ion-item>
-          </ion-card-content>
-        </ion-card>
+            <ion-list slot="content">
+              <ion-item lines="none">
+                <ion-label position="floating">Cantidad</ion-label>
+                <ion-input [(ngModel)]="item.cantidadInsumos" type="number" inputmode="number"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-accordion>
+        </ion-accordion-group>
         <div class="buttons-wrapper">
           <ion-button (click)="addItemCot.dismiss(); saveItems()" mode="ios" expand="full" expand="block"
             color="primary">Guardar</ion-button>
