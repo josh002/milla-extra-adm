@@ -1,0 +1,17 @@
+<ion-content>
+  <div class="list-items">
+    <h2>Lista de Productos</h2>
+    <ion-accordion-group>
+      <ion-accordion mode="md" *ngFor="let item of list">
+        <ion-item lines="none" slot="header">
+          <ion-label>{{item.name}} <span *ngIf="item.cantidadInsumos > 0">x {{item.cantidadInsumos}}</span>
+          </ion-label>
+          <ion-note slot="end" color="dark">$ {{item.priceUnit | number: '0.2'}}</ion-note>
+        </ion-item>
+        <ion-list slot="content">
+
+        </ion-list>
+      </ion-accordion>
+    </ion-accordion-group>
+  </div>
+</ion-content>

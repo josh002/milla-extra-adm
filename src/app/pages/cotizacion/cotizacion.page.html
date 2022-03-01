@@ -4,6 +4,10 @@
       <ion-card-subtitle>Nuevo Producto</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
+      <ion-item class="name-item">
+        <ion-label position="floating">Nombre producto</ion-label>
+        <ion-input [(ngModel)]="nameProduct" type="text" inputmode="text"></ion-input>
+      </ion-item>
       <ion-item lines="none" *ngFor="let item of listaProductos">
         <ion-label>{{item.name}} x {{item.cantidadInsumos}}</ion-label>
         <div class="precio" slot="end">$ {{item.precioInsumoTotal | number: '0.2'}}</div>
@@ -18,6 +22,8 @@
       <div class="buttons-wrapper">
         <ion-button (click)="addItemCot.present()" mode="ios" expand="full" expand="block" color="primary">Agregar
           insumos</ion-button>
+        <ion-button (click)="saveProduct()" mode="ios" expand="full" expand="block"
+          color="light">Guardar Producto</ion-button>
       </div>
     </ion-card-content>
   </ion-card>

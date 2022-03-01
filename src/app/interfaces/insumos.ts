@@ -12,3 +12,9 @@ export interface InsumoProducto {
     cantidadInsumos: number;
     precioInsumoTotal: number;
 }
+
+export interface Producto {
+    name: string;
+    insumosProducto: InsumoProducto[];
+    precio: number;
+}

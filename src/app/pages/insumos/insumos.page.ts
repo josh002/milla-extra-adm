@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Insumo } from 'src/app/interfaces/insumos';
+import { LocalStorage } from 'src/app/models/localStorage';
 
 @Component({
   selector: 'app-insumos',
@@ -12,7 +13,7 @@ export class InsumosPage implements OnInit {
   quantity: number;
   list: Insumo[] = [];
   constructor() {
-    const items = localStorage.getItem('insumos');
+    const items = localStorage.getItem(LocalStorage.insumos);
     if (items) { this.list = JSON.parse(items); };
   }
 
