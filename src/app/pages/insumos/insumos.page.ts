@@ -21,7 +21,7 @@ export class InsumosPage implements OnInit {
   }
 
   saveItem() {
-    this.list.push({ name: this.name, priceUnit: this.priceTotal / this.quantity, priceTotal: this.priceTotal, quantity: this.quantity });
+    this.list.push({ nombre: this.name, precio: this.priceTotal / this.quantity });
     this.resetValues();
     this.saveOnLocalStorage();
   }
@@ -38,7 +38,7 @@ export class InsumosPage implements OnInit {
 
   deleteItem(insumo: Insumo) {
     this.list = this.list.filter(item => {
-      if (item.name === insumo.name) {
+      if (item.nombre === insumo.nombre) {
         return false;
       }
       return true;

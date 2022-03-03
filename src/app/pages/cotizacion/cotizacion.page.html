@@ -9,8 +9,8 @@
         <ion-input [(ngModel)]="nameProduct" type="text" inputmode="text"></ion-input>
       </ion-item>
       <ion-item lines="none" *ngFor="let item of listaProductos">
-        <ion-label>{{item.name}} x {{item.cantidadInsumos}}</ion-label>
-        <div class="precio" slot="end">$ {{item.precioInsumoTotal | number: '0.2'}}</div>
+        <ion-label>{{item.nombre}} x {{item.cantidad}}</ion-label>
+        <div class="precio" slot="end">$ {{item.precioTotal | number: '0.2'}}</div>
         <ion-icon (click)="deleteItem(item)" slot="end" name="close-outline"></ion-icon>
       </ion-item>
       <ion-item class="total-item" lines="none" *ngIf="listaProductos.length > 0">
@@ -22,8 +22,8 @@
       <div class="buttons-wrapper">
         <ion-button (click)="addItemCot.present()" mode="ios" expand="full" expand="block" color="primary">Agregar
           insumos</ion-button>
-        <ion-button (click)="saveProduct()" mode="ios" expand="full" expand="block"
-          color="light">Guardar Producto</ion-button>
+        <ion-button (click)="saveProduct()" mode="ios" expand="full" expand="block" color="light">Guardar Producto
+        </ion-button>
       </div>
     </ion-card-content>
   </ion-card>
@@ -37,9 +37,9 @@
         <ion-accordion-group>
           <ion-accordion mode="md" *ngFor="let item of list">
             <ion-item lines="none" slot="header">
-              <ion-label>{{item.name}} <span *ngIf="item.cantidadInsumos > 0">x {{item.cantidadInsumos}}</span>
+              <ion-label>{{item.nombre}} <span *ngIf="item.cantidadInsumos > 0">x {{item.cantidadInsumos}}</span>
               </ion-label>
-              <ion-note slot="end" color="dark">$ {{item.priceUnit | number: '0.2'}}</ion-note>
+              <ion-note slot="end" color="dark">$ {{item.precio | number: '0.2'}}</ion-note>
             </ion-item>
             <ion-list slot="content">
               <ion-item lines="none">

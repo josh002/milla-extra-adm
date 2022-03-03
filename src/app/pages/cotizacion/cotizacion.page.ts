@@ -19,7 +19,7 @@ export class CotizacionPage implements OnInit {
     const items = localStorage.getItem(LocalStorage.insumos);
     if (items) {
       this.list = (JSON.parse(items) as InsumoProducto[]).map(insumo => {
-        insumo.cantidadInsumos = 0;
+        insumo.cantidad = 0;
         return insumo;
       });
     };
@@ -31,20 +31,20 @@ export class CotizacionPage implements OnInit {
   saveItems() {
     this.totalProducto = 0;
     this.listaProductos = this.list.map(item => {
-      item.precioInsumoTotal = item.priceUnit * item.cantidadInsumos;
-      this.totalProducto += item.precioInsumoTotal;
+      item.precioTotal = item.cantidad * item.precioTotal;
+      this.totalProducto += item.precioTotal;
       return item;
-    }).filter(item => item.cantidadInsumos > 0);
+    }).filter(item => item.cantidad > 0);
   }
 
   deleteItem(producto: InsumoProducto) {
     this.list = this.list.map(itemList => {
-      if (itemList.name === producto.name) { itemList.cantidadInsumos = 0; }
+      if (itemList.nombre === producto.nombre) { itemList.cantidad = 0; }
       return itemList;
     });
 
     this.listaProductos = this.listaProductos.filter(item => {
-      if (producto.name === item.name) { return false; }
+      if (producto.nombre === item.nombre) { return false; }
       return true;
     });
     this.saveItems();
@@ -57,9 +57,9 @@ export class CotizacionPage implements OnInit {
     let savedProducts = JSON.parse(localStorage.getItem(LocalStorage.productos));
     if (!savedProducts) { savedProducts = []; }
     const newProduct: Producto = {
-      name: this.nameProduct,
-      insumosProducto: this.listaProductos,
-      precio: this.listaProductos.reduce((prev, current) => prev + current.priceTotal, 0)
+      nombre: this.nameProduct,
+      insumos: this.listaProductos,
+      precio: this.totalProducto
     };
 
     savedProducts.push(newProduct);

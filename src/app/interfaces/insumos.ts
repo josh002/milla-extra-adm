@@ -1,20 +1,15 @@
 export interface Insumo {
-    name: string;
-    priceUnit: number;
-    priceTotal: number;
-    quantity: number;
-}
-export interface InsumoProducto {
-    name: string;
-    priceUnit: number;
-    priceTotal: number;
-    quantity: number;
-    cantidadInsumos: number;
-    precioInsumoTotal: number;
+    nombre: string;
+    precio: number;
 }
 
+export interface InsumoProducto {
+    nombre: string;
+    precioTotal: number;
+    cantidad: number;
+}
 export interface Producto {
-    name: string;
-    insumosProducto: InsumoProducto[];
+    nombre: string;
+    insumos: InsumoProducto[];
     precio: number;
 }

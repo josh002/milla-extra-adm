@@ -3,8 +3,8 @@
     <ion-card *ngFor="let item of list">
       <ion-card-content>
         <ion-item lines="none">
-          <ion-label>{{item.name}}</ion-label>
-          <ion-note slot="end" color="dark">$ {{item.priceUnit | number: '0.2'}}</ion-note>
+          <ion-label>{{item.nombre}}</ion-label>
+          <ion-note slot="end" color="dark">$ {{item.precio | number: '0.2'}}</ion-note>
           <ion-icon (click)="deleteItem(item)" slot="end" name="trash-outline"></ion-icon>
         </ion-item>
       </ion-card-content>
