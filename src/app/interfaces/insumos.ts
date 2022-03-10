@@ -5,11 +5,21 @@ export interface Insumo {
 
 export interface InsumoProducto {
     nombre: string;
-    precioTotal: number;
+    precio: number;
     cantidad: number;
 }
-export interface Producto {
+export class Producto {
     nombre: string;
-    insumos: InsumoProducto[];
+    insumos: {
+        nombre: string;
+        precio: number;
+        cantidad: number;
+    }[];
     precio: number;
+    constructor(
+    ) {
+        this.nombre = '';
+        this.insumos = [];
+        this.precio = 0;
+    }
 }
