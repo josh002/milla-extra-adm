@@ -1,11 +1,11 @@
 <ion-content>
   <div class="list-items">
-    <ion-card *ngFor="let item of list">
+    <ion-card *ngFor="let item of productList">
       <ion-card-content>
         <ion-item lines="none">
           <ion-label>{{item.nombre}}</ion-label>
           <ion-note slot="end" color="dark">$ {{item.precio | number: '0.2'}}</ion-note>
-          <ion-icon (click)="deleteItem(item)" slot="end" name="trash-outline"></ion-icon>
+          <ion-icon (click)="deleteProduct(item)" slot="end" name="trash-outline"></ion-icon>
         </ion-item>
       </ion-card-content>
     </ion-card>
@@ -33,7 +33,7 @@
           <ion-item lines="none" *ngFor="let item of productoNuevo.insumos">
             <ion-label>{{item.nombre}} x {{item.cantidad}}</ion-label>
             <div class="precio" slot="end">$ {{item.precio | number: '0.2'}}</div>
-            <ion-icon (click)="deleteItem(item)" slot="end" name="close-outline"></ion-icon>
+            <ion-icon (click)="deleteProduct(item)" slot="end" name="close-outline"></ion-icon>
           </ion-item>
           <ion-item class="total-item" lines="none" *ngIf="listaInsumos.length > 0">
             <ion-label><strong>Total</strong></ion-label>

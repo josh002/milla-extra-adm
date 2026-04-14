@@ -13,7 +13,7 @@
         <div class="precio" slot="end">$ {{item.precioTotal | number: '0.2'}}</div>
         <ion-icon (click)="deleteItem(item)" slot="end" name="close-outline"></ion-icon>
       </ion-item>
-      <ion-item class="total-item" lines="none" *ngIf="listaProductos.length > 0">
+      <ion-item class="total-item" lines="none" *ngIf="listaProductos?.length > 0">
         <ion-label><strong>Total</strong></ion-label>
         <div class="precio" slot="end">$ {{totalProducto | number: '0.2'}}</div>
         <ion-icon style="opacity: 0;" slot="end" name="close-outline"></ion-icon>
