@@ -45,6 +45,7 @@ export class ProductoPage implements OnInit {
         nombre: insumoProducto.nombre,
         precio: insumoProducto.precio * insumoProducto.cantidad,
         cantidad: insumoProducto.cantidad,
+        id: insumoProducto.id,
       }));
 
     this.calcProductPrice();
@@ -73,6 +74,7 @@ export class ProductoPage implements OnInit {
       nombre: this.newProduct.nombre,
       insumos: this.newProduct.insumos,
       precio: this.totalNewProductPrice,
+      id: this.generateUniqueId(),
     };
 
     this.productList.push(newProduct);
@@ -105,7 +107,7 @@ export class ProductoPage implements OnInit {
 
   deleteProduct(producto: Producto) {
     this.productList = this.productList.filter((itemList) => {
-      if (itemList.nombre === producto.nombre) {
+      if (itemList.id === producto.id) {
         return false;
       }
       return true;
@@ -117,11 +119,15 @@ export class ProductoPage implements OnInit {
 
   deleteMaterial(item: InsumoProducto) {
     this.newProduct.insumos = this.newProduct.insumos.filter((insumo) => {
-      if (insumo.nombre === item.nombre) {
+      if (insumo.id === item.id) {
         return false;
       }
       return true;
     });
     this.calcProductPrice();
+  }
+
+  private generateUniqueId(): string {
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
   }
 }

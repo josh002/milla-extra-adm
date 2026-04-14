@@ -26,6 +26,7 @@ export class InsumosPage implements OnInit {
     this.list.push({
       nombre: this.name,
       precio: this.priceTotal / this.quantity,
+      id: this.generateUniqueId(),
     });
     this.resetValues();
     this.saveOnLocalStorage();
@@ -43,11 +44,15 @@ export class InsumosPage implements OnInit {
 
   deleteItem(insumo: Insumo) {
     this.list = this.list.filter((item) => {
-      if (item.nombre === insumo.nombre) {
+      if (item.id === insumo.id) {
         return false;
       }
       return true;
     });
     this.saveOnLocalStorage();
+  }
+
+  private generateUniqueId(): string {
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
   }
 }
