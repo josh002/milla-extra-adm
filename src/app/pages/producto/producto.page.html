@@ -20,7 +20,6 @@
 
 <ion-modal mode="ios" #addItemModal>
   <ng-template>
-    <ion-content>
       <ion-card>
         <ion-card-header>
           <ion-card-subtitle>Nuevo Producto</ion-card-subtitle>
@@ -28,28 +27,27 @@
         <ion-card-content>
           <ion-item class="name-item">
             <ion-label position="floating">Nombre producto</ion-label>
-            <ion-input [(ngModel)]="productoNuevo.nombre" type="text" inputmode="text"></ion-input>
+            <ion-input [(ngModel)]="newProduct.nombre" type="text" inputmode="text"></ion-input>
           </ion-item>
-          <ion-item lines="none" *ngFor="let item of productoNuevo.insumos">
+          <ion-item lines="none" *ngFor="let item of newProduct.insumos">
             <ion-label>{{item.nombre}} x {{item.cantidad}}</ion-label>
             <div class="precio" slot="end">$ {{item.precio | number: '0.2'}}</div>
-            <ion-icon (click)="deleteProduct(item)" slot="end" name="close-outline"></ion-icon>
+            <ion-icon class="cursor-pointer" (click)="deleteMaterial(item)" slot="end" name="close-outline"></ion-icon>
           </ion-item>
-          <ion-item class="total-item" lines="none" *ngIf="listaInsumos.length > 0">
+          <ion-item class="total-item" lines="none" *ngIf="materialList.length > 0">
             <ion-label><strong>Total</strong></ion-label>
-            <div class="precio" slot="end">$ {{totalProducto | number: '0.2'}}</div>
+            <div class="precio" slot="end">$ {{totalNewProductPrice | number: '0.2'}}</div>
             <ion-icon style="opacity: 0;" slot="end" name="close-outline"></ion-icon>
 
           </ion-item>
           <div class="buttons-wrapper">
             <ion-button (click)="addItemCot.present()" mode="ios" expand="full" expand="block" color="primary">Agregar
               insumos</ion-button>
-            <ion-button (click)="addItemModal.dismiss();saveProduct()" mode="ios" expand="full" expand="block" color="light">Guardar Producto
+            <ion-button (click)="saveProduct()" mode="ios" expand="full" expand="block" color="light">Guardar Producto
             </ion-button>
           </div>
         </ion-card-content>
       </ion-card>
-    </ion-content>
   </ng-template>
 </ion-modal>
 
@@ -59,7 +57,7 @@
       <div class="list-items">
         <h2>Lista de insumos</h2>
         <ion-accordion-group>
-          <ion-accordion mode="md" *ngFor="let item of listaInsumos">
+          <ion-accordion mode="md" *ngFor="let item of materialList">
             <ion-item lines="none" slot="header">
               <ion-label>{{item.nombre}} <span *ngIf="item.cantidad > 0">x {{item.cantidad}}</span>
               </ion-label>

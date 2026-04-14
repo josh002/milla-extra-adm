@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { InsumoProducto, Producto } from 'src/app/interfaces/insumos';
 import { LocalStorage } from 'src/app/models/localStorage';
-import { ToastController } from '@ionic/angular';
+import { IonModal, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-producto',
@@ -9,48 +9,59 @@ import { ToastController } from '@ionic/angular';
   styleUrls: ['./producto.page.scss'],
 })
 export class ProductoPage implements OnInit {
+  @ViewChild('addItemModal') addItemModal!: IonModal;
+
   productList: Producto[] = [];
-  productoNuevo: Producto = new Producto();
-  listaInsumos: InsumoProducto[] = [];
-  totalProducto = 0;
+  materialList: InsumoProducto[] = [];
+
+  newProduct: Producto = new Producto();
+  totalNewProductPrice = 0;
 
   constructor(private toastController: ToastController) {
     const items = localStorage.getItem(LocalStorage.productos);
     if (items) {
       this.productList = JSON.parse(items) as Producto[];
     }
-    const insumos = localStorage.getItem(LocalStorage.insumos);
-    if (insumos) {
-      this.listaInsumos = (JSON.parse(insumos) as InsumoProducto[]).map(
+    const material = localStorage.getItem(LocalStorage.insumos);
+    if (material) {
+      this.materialList = (JSON.parse(material) as InsumoProducto[]).map(
         (insumo) => {
           insumo.cantidad = 0;
           return insumo;
         },
       );
     }
-    console.log(this.listaInsumos);
+    console.log(this.materialList);
   }
 
   ngOnInit() {}
 
-  guardarInsumosProductoNuevo() {
-    this.productoNuevo.insumos = this.listaInsumos.map((insumoProducto) => ({
-      nombre: insumoProducto.nombre,
-      precio: insumoProducto.precio * insumoProducto.cantidad,
-      cantidad: insumoProducto.cantidad,
-    }));
+  //  FUNCTIONS FOR PRODUCTS
 
-    this.totalProducto = this.productoNuevo.insumos.reduce(
+  guardarInsumosProductoNuevo() {
+    this.newProduct.insumos = this.materialList
+      .filter((insumoProducto) => insumoProducto.cantidad > 0)
+      .map((insumoProducto) => ({
+        nombre: insumoProducto.nombre,
+        precio: insumoProducto.precio * insumoProducto.cantidad,
+        cantidad: insumoProducto.cantidad,
+      }));
+
+    this.calcProductPrice();
+  }
+
+  calcProductPrice() {
+    this.totalNewProductPrice = this.newProduct.insumos.reduce(
       (total, insumo) => total + insumo.precio,
       0,
     );
   }
 
   saveProduct() {
-    if (!this.productoNuevo.nombre) {
+    if (!this.newProduct.nombre) {
       return this.presentToast('Falta nombre');
     }
-    if (this.productoNuevo.insumos.length === 0) {
+    if (this.newProduct.insumos.length === 0) {
       return this.presentToast('Faltan productos');
     }
 
@@ -59,24 +70,28 @@ export class ProductoPage implements OnInit {
     }
 
     const newProduct: Producto = {
-      nombre: this.productoNuevo.nombre,
-      insumos: this.productoNuevo.insumos,
-      precio: this.totalProducto,
+      nombre: this.newProduct.nombre,
+      insumos: this.newProduct.insumos,
+      precio: this.totalNewProductPrice,
     };
 
     this.productList.push(newProduct);
+    this.saveProductOnLocalStorage();
+    this.reset();
+    this.addItemModal.dismiss();
+    this.presentToast('Producto agregado');
+  }
+
+  saveProductOnLocalStorage() {
     localStorage.setItem(
       LocalStorage.productos,
       JSON.stringify(this.productList),
     );
-    this.reset();
-    this.presentToast('Producto agregado');
   }
 
   reset() {
-    this.productoNuevo = new Producto();
-    this.listaInsumos = [];
-    this.totalProducto = 0;
+    this.newProduct = new Producto();
+    this.totalNewProductPrice = 0;
   }
 
   async presentToast(mensaje: string) {
@@ -95,5 +110,18 @@ export class ProductoPage implements OnInit {
       }
       return true;
     });
+    this.saveProductOnLocalStorage();
+  }
+
+  // FUNCTIONS FOR MATERIALS
+
+  deleteMaterial(item: InsumoProducto) {
+    this.newProduct.insumos = this.newProduct.insumos.filter((insumo) => {
+      if (insumo.nombre === item.nombre) {
+        return false;
+      }
+      return true;
+    });
+    this.calcProductPrice();
   }
 }

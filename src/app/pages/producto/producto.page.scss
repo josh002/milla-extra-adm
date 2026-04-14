@@ -1,50 +1,61 @@
 ion-card-header {
-    ion-chip {
-        position: absolute;
-        right: 4px;
-        top: 5px;
-        font-size: 18px;
-        font-weight: bold;
-    }
+  ion-chip {
+    position: absolute;
+    right: 4px;
+    top: 5px;
+    font-size: 18px;
+    font-weight: bold;
+  }
 }
 .buttons-wrapper {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 .name-item {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 .list-items {
-    padding: 6vw;
-    h2 {
-        margin-bottom: 20px;
+  padding: 6vw;
+  h2 {
+    margin-bottom: 20px;
+  }
+  ion-card {
+    margin: 0 0 10px;
+    ion-card-content {
+      padding: 0;
     }
-    ion-card {
-        margin: 0 0 10px;
-        ion-card-content {
-            padding: 0;
-        }
+  }
+  ion-item {
+    ion-label {
+      font-size: 18px;
+      color: gray;
     }
-    ion-item {
-        ion-label {
-            font-size: 18px;
-            color: gray;
-        }
-        ion-note {
-            font-size: 18px;
-            font-weight: bold;
-        }
+    ion-note {
+      font-size: 18px;
+      font-weight: bold;
     }
+  }
 }
 
 .precio {
-    font-weight: bold;
-    font-size: 16px;
+  font-weight: bold;
+  font-size: 16px;
 }
 .total-item {
-    border-top: 1px solid gray;
+  border-top: 1px solid gray;
 }
 
 ion-accordion {
-    box-shadow: rgb(0 0 0 / 20%) 0px 3px 1px -2px, rgb(0 0 0 / 14%) 0px 2px 2px 0px, rgb(0 0 0 / 12%) 0px 1px 5px 0px;
-    margin-bottom: 5px;
+  box-shadow:
+    rgb(0 0 0 / 20%) 0px 3px 1px -2px,
+    rgb(0 0 0 / 14%) 0px 2px 2px 0px,
+    rgb(0 0 0 / 12%) 0px 1px 5px 0px;
+  margin-bottom: 5px;
+}
+
+ion-modal {
+  --background: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

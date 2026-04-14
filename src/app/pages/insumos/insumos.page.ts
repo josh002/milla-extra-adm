@@ -8,28 +8,33 @@ import { LocalStorage } from 'src/app/models/localStorage';
   styleUrls: ['./insumos.page.scss'],
 })
 export class InsumosPage implements OnInit {
-  name: string;
-  priceTotal: number;
-  quantity: number;
+  name = '';
+  priceTotal = 0;
+  quantity = 0;
   list: Insumo[] = [];
   constructor() {
     const items = localStorage.getItem(LocalStorage.insumos);
-    if (items) { this.list = JSON.parse(items); };
+    if (items) {
+      this.list = JSON.parse(items);
+    }
   }
 
   ngOnInit() {
   }
 
   saveItem() {
-    this.list.push({ nombre: this.name, precio: this.priceTotal / this.quantity });
+    this.list.push({
+      nombre: this.name,
+      precio: this.priceTotal / this.quantity,
+    });
     this.resetValues();
     this.saveOnLocalStorage();
   }
 
   resetValues() {
-    this.name = undefined;
-    this.priceTotal = undefined;
-    this.quantity = undefined;
+    this.name = '';
+    this.priceTotal = 0;
+    this.quantity = 0;
   }
 
   saveOnLocalStorage() {
@@ -37,7 +42,7 @@ export class InsumosPage implements OnInit {
   }
 
   deleteItem(insumo: Insumo) {
-    this.list = this.list.filter(item => {
+    this.list = this.list.filter((item) => {
       if (item.nombre === insumo.nombre) {
         return false;
       }
