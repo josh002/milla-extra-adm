@@ -5,7 +5,7 @@
         <ion-item lines="none">
           <ion-label>{{item.nombre}}</ion-label>
           <ion-note slot="end" color="dark">$ {{item.precio | number: '0.2'}}</ion-note>
-          <ion-icon (click)="deleteItem(item)" slot="end" name="trash-outline"></ion-icon>
+          <ion-icon class="cursor-pointer" (click)="deleteItem(item)" slot="end" name="trash-outline"></ion-icon>
         </ion-item>
       </ion-card-content>
     </ion-card>

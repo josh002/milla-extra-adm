@@ -11,8 +11,8 @@
     "lint": "ng lint",
     "start-android": "npx cap copy android && npx cap sync android && npx cap update android && npx cap open android",
     "e2e": "ng e2e",
-    "build:gh": "ng build --configuration production --base-href /milla-extra-adm/",
-    "deploy:gh": "gh-pages -d www --add --no-history"
+    "build:gh": "ng build --configuration production --base-href /milla-extra-adm/ --deploy-url /milla-extra-adm/",
+    "deploy:gh": "npm run build:gh && gh-pages -d www --add --no-history"
   },
   "private": true,
   "dependencies": {
@@ -67,6 +67,9 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "typescript": "~4.4.4"
+  },
+  "overrides": {
+    "caniuse-lite": "1.0.30001281"
   },
   "description": "An Ionic project"
 }
