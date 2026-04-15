@@ -21,6 +21,9 @@ ion-menu {
 
 ion-toolbar {
   --min-height: 50px;
+  .title {
+    margin-left: 1rem;
+  }
 }
 .start-logo {
   height: 25px;
