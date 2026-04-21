@@ -11,7 +11,7 @@
     "lint": "ng lint",
     "start-android": "npx cap copy android && npx cap sync android && npx cap update android && npx cap open android",
     "e2e": "ng e2e",
-    "build:gh": "ng build --configuration production --base-href /milla-extra-adm/ --deploy-url /milla-extra-adm/",
+    "build:gh": "ng build --configuration production --base-href /milla-extra-adm/",
     "deploy:gh": "npm run build:gh && gh-pages -d www --add --no-history"
   },
   "private": true,
