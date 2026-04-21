@@ -1,0 +1,18 @@
+<ion-content class="ion-padding">
+  <div class="login-container">
+    <img src="assets/logo.png" alt="Logo" class="logo" />
+    <h1>Milla Extra</h1>
+    <p>Inicia sesión para continuar</p>
+
+    <ion-button
+      expand="block"
+      (click)="loginWithGoogle()"
+      [disabled]="isLoading"
+    >
+      <ion-icon name="logo-google" slot="start"></ion-icon>
+      Continuar con Google
+    </ion-button>
+
+    <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+  </div>
+</ion-content>

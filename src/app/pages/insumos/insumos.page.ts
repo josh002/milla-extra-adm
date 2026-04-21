@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Insumo } from 'src/app/interfaces/insumos';
-import { LocalStorage } from 'src/app/models/localStorage';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-insumos',
@@ -12,24 +12,28 @@ export class InsumosPage implements OnInit {
   priceTotal = 0;
   quantity = 0;
   list: Insumo[] = [];
-  constructor() {
-    const items = localStorage.getItem(LocalStorage.insumos);
-    if (items) {
-      this.list = JSON.parse(items);
+  isLoading = false;
+
+  constructor(private dataService: DataService) {}
+
+  async ngOnInit() {
+    this.isLoading = true;
+    try {
+      this.list = await this.dataService.getInsumos();
+    } finally {
+      this.isLoading = false;
     }
   }
 
-  ngOnInit() {
-  }
-
-  saveItem() {
-    this.list.push({
+  async saveItem() {
+    const insumo: Insumo = {
       nombre: this.name,
       precio: this.priceTotal / this.quantity,
       id: this.generateUniqueId(),
-    });
+    };
+    this.list.push(insumo);
     this.resetValues();
-    this.saveOnLocalStorage();
+    await this.dataService.addInsumo(insumo);
   }
 
   resetValues() {
@@ -38,18 +42,9 @@ export class InsumosPage implements OnInit {
     this.quantity = 0;
   }
 
-  saveOnLocalStorage() {
-    localStorage.setItem('insumos', JSON.stringify(this.list));
-  }
-
-  deleteItem(insumo: Insumo) {
-    this.list = this.list.filter((item) => {
-      if (item.id === insumo.id) {
-        return false;
-      }
-      return true;
-    });
-    this.saveOnLocalStorage();
+  async deleteItem(insumo: Insumo) {
+    this.list = this.list.filter((item) => item.id !== insumo.id);
+    await this.dataService.deleteInsumo(insumo.id);
   }
 
   private generateUniqueId(): string {

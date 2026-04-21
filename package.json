@@ -30,6 +30,7 @@
     "@capacitor/splash-screen": "^1.2.2",
     "@capacitor/status-bar": "1.0.8",
     "@ionic/angular": "^6.0.0",
+    "firebase": "9.22.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"
@@ -67,9 +68,6 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "typescript": "~4.4.4"
-  },
-  "overrides": {
-    "caniuse-lite": "1.0.30001281"
   },
   "description": "An Ionic project"
 }

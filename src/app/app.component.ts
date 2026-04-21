@@ -1,4 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AuthService } from './services/auth.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -10,5 +12,9 @@ export class AppComponent {
     // { title: 'Cotización', url: '/cotizacion', icon: 'logo-usd' },
     { title: 'Productos', url: '/producto', icon: 'file-tray-stacked-outline' },
   ];
-  constructor() { }
+  public isLoggedIn$: Observable<boolean>;
+
+  constructor(public authService: AuthService) {
+    this.isLoggedIn$ = this.authService.isLoggedIn();
+  }
 }

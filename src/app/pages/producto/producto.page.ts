@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { InsumoProducto, Producto } from 'src/app/interfaces/insumos';
-import { LocalStorage } from 'src/app/models/localStorage';
+import { DataService } from 'src/app/services/data.service';
 import { IonModal, ToastController } from '@ionic/angular';
 
 @Component({
@@ -16,25 +16,26 @@ export class ProductoPage implements OnInit {
 
   newProduct: Producto = new Producto();
   totalNewProductPrice = 0;
+  isLoading = false;
 
-  constructor(private toastController: ToastController) {
-    const items = localStorage.getItem(LocalStorage.productos);
-    if (items) {
-      this.productList = JSON.parse(items) as Producto[];
+  constructor(
+    private toastController: ToastController,
+    private dataService: DataService,
+  ) {}
+
+  async ngOnInit() {
+    this.isLoading = true;
+    try {
+      this.productList = await this.dataService.getProductos();
+      const insumos = await this.dataService.getInsumos();
+      this.materialList = insumos.map((insumo) => ({
+        ...insumo,
+        cantidad: 0,
+      }));
+    } finally {
+      this.isLoading = false;
     }
-    const material = localStorage.getItem(LocalStorage.insumos);
-    if (material) {
-      this.materialList = (JSON.parse(material) as InsumoProducto[]).map(
-        (insumo) => {
-          insumo.cantidad = 0;
-          return insumo;
-        },
-      );
-    }
-    console.log(this.materialList);
   }
-
-  ngOnInit() {}
 
   //  FUNCTIONS FOR PRODUCTS
 
@@ -58,7 +59,7 @@ export class ProductoPage implements OnInit {
     );
   }
 
-  saveProduct() {
+  async saveProduct() {
     if (!this.newProduct.nombre) {
       return this.presentToast('Falta nombre');
     }
@@ -78,17 +79,10 @@ export class ProductoPage implements OnInit {
     };
 
     this.productList.push(newProduct);
-    this.saveProductOnLocalStorage();
+    await this.dataService.addProducto(newProduct);
     this.reset();
     this.addItemModal.dismiss();
     this.presentToast('Producto agregado');
-  }
-
-  saveProductOnLocalStorage() {
-    localStorage.setItem(
-      LocalStorage.productos,
-      JSON.stringify(this.productList),
-    );
   }
 
   reset() {
@@ -105,14 +99,9 @@ export class ProductoPage implements OnInit {
     toast.present();
   }
 
-  deleteProduct(producto: Producto) {
-    this.productList = this.productList.filter((itemList) => {
-      if (itemList.id === producto.id) {
-        return false;
-      }
-      return true;
-    });
-    this.saveProductOnLocalStorage();
+  async deleteProduct(producto: Producto) {
+    this.productList = this.productList.filter((itemList) => itemList.id !== producto.id);
+    await this.dataService.deleteProducto(producto.id);
   }
 
   // FUNCTIONS FOR MATERIALS
