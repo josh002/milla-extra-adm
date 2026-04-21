@@ -10,9 +10,11 @@ import { IonModal, ToastController } from '@ionic/angular';
 })
 export class ProductoPage implements OnInit {
   @ViewChild('addItemModal') addItemModal!: IonModal;
+  @ViewChild('addItemCot') addItemCot!: IonModal;
 
   productList: Producto[] = [];
   materialList: InsumoProducto[] = [];
+  editingProductId: string | null = null;
 
   newProduct: Producto = new Producto();
   totalNewProductPrice = 0;
@@ -26,8 +28,9 @@ export class ProductoPage implements OnInit {
   async ngOnInit() {
     this.isLoading = true;
     try {
-      this.productList = await this.dataService.getProductos();
       const insumos = await this.dataService.getInsumos();
+      await this.dataService.syncProductosConInsumos(insumos);
+      this.productList = await this.dataService.getProductos();
       this.materialList = insumos.map((insumo) => ({
         ...insumo,
         cantidad: 0,
@@ -38,6 +41,33 @@ export class ProductoPage implements OnInit {
   }
 
   //  FUNCTIONS FOR PRODUCTS
+
+  openCreateProductModal() {
+    this.editingProductId = null;
+    this.reset();
+    this.resetMaterialQuantities();
+    this.addItemModal.present();
+  }
+
+  openEditProductModal(producto: Producto) {
+    this.editingProductId = producto.id;
+    this.newProduct = {
+      ...producto,
+      insumos: producto.insumos.map((insumo) => ({ ...insumo })),
+    };
+
+    const quantitiesByInsumoId = new Map(
+      producto.insumos.map((insumo) => [insumo.id, insumo.cantidad]),
+    );
+
+    this.materialList = this.materialList.map((insumo) => ({
+      ...insumo,
+      cantidad: quantitiesByInsumoId.get(insumo.id) || 0,
+    }));
+
+    this.guardarInsumosProductoNuevo();
+    this.addItemModal.present();
+  }
 
   guardarInsumosProductoNuevo() {
     this.newProduct.insumos = this.materialList
@@ -60,34 +90,48 @@ export class ProductoPage implements OnInit {
   }
 
   async saveProduct() {
-    if (!this.newProduct.nombre) {
+    if (!this.newProduct.nombre.trim()) {
       return this.presentToast('Falta nombre');
     }
     if (this.newProduct.insumos.length === 0) {
-      return this.presentToast('Faltan productos');
+      return this.presentToast('Faltan insumos');
     }
 
-    if (!this.productList) {
-      this.productList = [];
-    }
-
-    const newProduct: Producto = {
-      nombre: this.newProduct.nombre,
+    const productToSave: Producto = {
+      nombre: this.newProduct.nombre.trim(),
       insumos: this.newProduct.insumos,
       precio: this.totalNewProductPrice,
-      id: this.generateUniqueId(),
+      id: this.editingProductId ?? this.generateUniqueId(),
     };
 
-    this.productList.push(newProduct);
-    await this.dataService.addProducto(newProduct);
+    if (this.editingProductId) {
+      this.productList = this.productList.map((item) =>
+        item.id === productToSave.id ? productToSave : item,
+      );
+      await this.dataService.updateProducto(productToSave);
+      this.presentToast('Producto actualizado');
+    } else {
+      this.productList.push(productToSave);
+      await this.dataService.addProducto(productToSave);
+      this.presentToast('Producto agregado');
+    }
+
     this.reset();
+    this.resetMaterialQuantities();
+    this.editingProductId = null;
     this.addItemModal.dismiss();
-    this.presentToast('Producto agregado');
   }
 
   reset() {
     this.newProduct = new Producto();
     this.totalNewProductPrice = 0;
+  }
+
+  closeProductModal() {
+    this.addItemModal.dismiss();
+    this.reset();
+    this.resetMaterialQuantities();
+    this.editingProductId = null;
   }
 
   async presentToast(mensaje: string) {
@@ -113,7 +157,20 @@ export class ProductoPage implements OnInit {
       }
       return true;
     });
+    this.materialList = this.materialList.map((insumo) => {
+      if (insumo.id === item.id) {
+        return { ...insumo, cantidad: 0 };
+      }
+      return insumo;
+    });
     this.calcProductPrice();
+  }
+
+  private resetMaterialQuantities() {
+    this.materialList = this.materialList.map((insumo) => ({
+      ...insumo,
+      cantidad: 0,
+    }));
   }
 
   private generateUniqueId(): string {

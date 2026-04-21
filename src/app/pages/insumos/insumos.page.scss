@@ -31,6 +31,9 @@ ion-card-header {
 
 ion-modal {
   --background: none;
+  ion-content {
+    --background: none;
+  }
 }
 
 .cursor-pointer {

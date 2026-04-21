@@ -30,6 +30,12 @@ export class DataService {
     await setDoc(insumoRef, insumo);
   }
 
+  async updateInsumo(insumo: Insumo): Promise<void> {
+    const uid = await this.getUserId();
+    const insumoRef = doc(firestore, `users/${uid}/insumos/${insumo.id}`);
+    await setDoc(insumoRef, insumo);
+  }
+
   async deleteInsumo(id: string): Promise<void> {
     const uid = await this.getUserId();
     const insumoRef = doc(firestore, `users/${uid}/insumos/${id}`);
@@ -51,9 +57,61 @@ export class DataService {
     await setDoc(productoRef, producto);
   }
 
+  async updateProducto(producto: Producto): Promise<void> {
+    const uid = await this.getUserId();
+    const productoRef = doc(firestore, `users/${uid}/productos/${producto.id}`);
+    await setDoc(productoRef, producto);
+  }
+
   async deleteProducto(id: string): Promise<void> {
     const uid = await this.getUserId();
     const productoRef = doc(firestore, `users/${uid}/productos/${id}`);
     await deleteDoc(productoRef);
+  }
+
+  async syncProductosConInsumos(insumosActuales?: Insumo[]): Promise<void> {
+    const insumos = insumosActuales ?? (await this.getInsumos());
+    const productos = await this.getProductos();
+    const insumoById = new Map(insumos.map((insumo) => [insumo.id, insumo]));
+
+    for (const producto of productos) {
+      let changed = false;
+
+      const insumosActualizados = producto.insumos.map((insumoProducto) => {
+        const insumoActual = insumoById.get(insumoProducto.id);
+        if (!insumoActual) {
+          return insumoProducto;
+        }
+
+        const cantidad = insumoProducto.cantidad || 0;
+        const precioCalculado = insumoActual.precio * cantidad;
+
+        if (
+          insumoProducto.nombre !== insumoActual.nombre ||
+          insumoProducto.precio !== precioCalculado
+        ) {
+          changed = true;
+        }
+
+        return {
+          ...insumoProducto,
+          nombre: insumoActual.nombre,
+          precio: precioCalculado,
+        };
+      });
+
+      const precioTotalActualizado = insumosActualizados.reduce(
+        (total, insumoProducto) => total + insumoProducto.precio,
+        0,
+      );
+
+      if (changed || producto.precio !== precioTotalActualizado) {
+        await this.updateProducto({
+          ...producto,
+          insumos: insumosActualizados,
+          precio: precioTotalActualizado,
+        });
+      }
+    }
   }
 }

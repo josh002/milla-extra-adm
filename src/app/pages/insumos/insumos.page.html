@@ -5,6 +5,7 @@
         <ion-item lines="none">
           <ion-label>{{item.nombre}}</ion-label>
           <ion-note slot="end" color="dark">$ {{item.precio | number: '0.2'}}</ion-note>
+          <ion-icon class="cursor-pointer" (click)="openEditModal(item)" slot="end" name="create-outline"></ion-icon>
           <ion-icon class="cursor-pointer" (click)="deleteItem(item)" slot="end" name="trash-outline"></ion-icon>
         </ion-item>
       </ion-card-content>
@@ -27,7 +28,7 @@
             <ion-card-subtitle>Nuevo insumo</ion-card-subtitle>
             <ion-chip>
               <ion-icon name="logo-usd"></ion-icon>
-              <ion-label>{{priceTotal/quantity | number: '0.2' }}</ion-label>
+              <ion-label>{{priceTotal | number: '0.2' }}</ion-label>
             </ion-chip>
           </ion-card-header>
           <ion-card-content>
@@ -39,15 +40,43 @@
               <ion-label position="floating">Precio total</ion-label>
               <ion-input [(ngModel)]="priceTotal" type="number" inputmode="numeric"></ion-input>
             </ion-item>
-            <ion-item>
-              <ion-label position="floating">Cantidad</ion-label>
-              <ion-input [(ngModel)]="quantity" type="number" inputmode="numeric"></ion-input>
-            </ion-item>
             <div class="buttons-wrapper">
-              <ion-button (click)="addItemModal.dismiss(); saveItem()" mode="ios" expand="full" expand="block"
+              <ion-button (click)="saveItem()" mode="ios" expand="full" expand="block"
                 color="primary">Guardar</ion-button>
               <ion-button (click)="addItemModal.dismiss(); resetValues()" mode="ios" expand="full" expand="block"
                 color="light">Cancelar</ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal mode="ios" #editItemModal>
+  <ng-template>
+    <ion-content>
+      <div class="input-wrapper">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>Editar insumo</ion-card-subtitle>
+            <ion-chip>
+              <ion-icon name="logo-usd"></ion-icon>
+              <ion-label>{{editPriceTotal | number: '0.2' }}</ion-label>
+            </ion-chip>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              <ion-label position="floating">Insumo</ion-label>
+              <ion-input [(ngModel)]="editName" type="text" inputmode="text"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Precio total</ion-label>
+              <ion-input [(ngModel)]="editPriceTotal" type="number" inputmode="numeric"></ion-input>
+            </ion-item>
+            <div class="buttons-wrapper">
+              <ion-button (click)="updateItem()" mode="ios" expand="full" expand="block" color="primary">Actualizar</ion-button>
+              <ion-button (click)="editItemModal.dismiss(); clearEditValues()" mode="ios" expand="full" expand="block" color="light">Cancelar</ion-button>
             </div>
           </ion-card-content>
         </ion-card>

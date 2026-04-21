@@ -10,14 +10,17 @@ export interface InsumoProducto {
   cantidad: number;
   id: string;
 }
+
+export interface ProductoInsumo {
+  nombre: string;
+  precio: number;
+  cantidad: number;
+  id: string;
+}
+
 export class Producto {
   nombre: string;
-  insumos: {
-    nombre: string;
-    precio: number;
-    cantidad: number;
-    id: string;
-  }[];
+  insumos: ProductoInsumo[];
   id: string;
   precio: number;
   constructor() {
