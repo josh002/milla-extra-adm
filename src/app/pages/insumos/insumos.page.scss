@@ -7,6 +7,7 @@ ion-card-header {
         font-weight: bold;
     }
 }
+
 .buttons-wrapper {
     margin-top: 20px;
 }
@@ -17,11 +18,13 @@ ion-card-header {
             padding: 0;
         }
     }
+
     ion-item {
         ion-label {
             font-size: 18px;
             color: gray;
         }
+
         ion-note {
             font-size: 18px;
             font-weight: bold;
@@ -30,12 +33,17 @@ ion-card-header {
 }
 
 ion-modal {
-  --background: none;
-  ion-content {
     --background: none;
-  }
+
+    ion-content {
+        --background: none;
+    }
+
+    ion-card {
+        overflow: auto;
+    }
 }
 
 .cursor-pointer {
-  cursor: pointer;
+    cursor: pointer;
 }
